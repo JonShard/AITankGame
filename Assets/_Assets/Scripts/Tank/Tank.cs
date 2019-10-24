@@ -27,7 +27,7 @@ public class Tank : MonoBehaviour
 
     Rigidbody rigid;
     Rigidbody bodyRigid;
-    Transform turret;
+    Rigidbody turret;
     Transform barrelTip;
     ParticleSystem fireEffect;
 
@@ -36,8 +36,8 @@ public class Tank : MonoBehaviour
     {
         rigid = GetComponent<Rigidbody>();
         bodyRigid = transform.Find("Body").GetComponent<Rigidbody>();
-        turret = transform.Find("Body").Find("Turret");
-        barrelTip = turret.Find("BarrelTip");
+        turret = transform.Find("Turret").GetComponent<Rigidbody>();
+        barrelTip = turret.transform.Find("BarrelTip");
         fireEffect = GetComponentInChildren<ParticleSystem>();
     }
 
@@ -54,7 +54,7 @@ public class Tank : MonoBehaviour
         rigid.velocity = Vector3.ClampMagnitude(rigid.velocity, maxSpeed);
         rigid.angularVelocity = Vector3.ClampMagnitude(rigid.angularVelocity, turnMaxSpeed);
 
-        turret.Rotate(new Vector3(0, turretMove * lookSpeed, 0));
+        turret.AddRelativeTorque((new Vector3(0, turretMove * lookSpeed, 0)), ForceMode.Acceleration);
 
         turning = 0;
         throttle = 0;
@@ -86,7 +86,16 @@ public class Tank : MonoBehaviour
         }
         fireEffect.Clear();
         fireEffect.Play();
-        Vector4 recoil = turret.worldToLocalMatrix * new Vector4(_recoilForce, 0, 0, 0);
+        Vector4 recoil = turret.transform.worldToLocalMatrix * new Vector4(_recoilForce, 0, 0, 0);
         bodyRigid.AddRelativeTorque(recoil , ForceMode.Impulse);
+    }
+
+    public void RegisterHit()
+    {
+        lives--;
+        if (lives <= 0)
+        {
+            // Pop off turret.
+        }
     }
 }
