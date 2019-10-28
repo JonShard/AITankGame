@@ -11,6 +11,28 @@ public class TileMapGenerator : MonoBehaviour
     
     public List<Tile> tiles;
 
+    public Tile FindClosestTile(Transform point)
+    {
+        float shortestSquareDist = Mathf.Infinity;
+        Tile bestCandidate = new Tile();
+        if (tiles.Count == 0)
+        {
+            Debug.LogWarning("Tried to get closest tile to a point, but tiles is empty.");
+            return bestCandidate;
+        }
+
+        foreach (Tile t in tiles)
+        {
+            float dist = (t.transform.position - point.position).sqrMagnitude;
+            if (dist < shortestSquareDist)
+            {
+                shortestSquareDist = dist;
+                bestCandidate = t;
+            }
+        }
+        return bestCandidate;
+    }
+
     void ClearNeigbors() 
     {
         tiles = new List<Tile>(GetComponentsInChildren<Tile>());

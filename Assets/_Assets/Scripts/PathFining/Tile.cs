@@ -6,7 +6,6 @@ public class Tile : MonoBehaviour {
 
     public enum TileType { Traversable, NonTraversable }
 
-    [SerializeField] private bool _useDistance = true;
     [SerializeField] private float weight = 1;
     public float Weight { get { return weight; } }
 
@@ -15,6 +14,13 @@ public class Tile : MonoBehaviour {
 
     [SerializeField] public TileType type;
     public List<Tile> neighbors;
+    [HideInInspector] public float f = 0;
+    [HideInInspector] public float h = 0;
+
+    public static bool operator <(Tile a, Tile b)
+        => (a.f < b.f);
+    public static bool operator >(Tile a, Tile b)
+        => (a.f > b.f);
 
     /*
     public List<KeyValuePair<float, Tile>> GetNeigbors() {
