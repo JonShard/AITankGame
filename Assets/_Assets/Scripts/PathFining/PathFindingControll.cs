@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Tank), typeof(PathFinder))]
+[RequireComponent(typeof(Tank))]
 public class PathFindingControll : MonoBehaviour
 {
     [Header("Behavior")]
@@ -27,9 +27,13 @@ public class PathFindingControll : MonoBehaviour
     {
         _tank = GetComponent<Tank>();
         _rigid = GetComponent<Rigidbody>(); // Required through Tank.
-        _pathFinder = GetComponent<PathFinder>();
-        if (_pathFinder == null)
-            _pathFinder = gameObject.AddComponent<PathFinder>();
+        _pathFinder = GameObject.Find("TileMap").GetComponent<PathFinder>();
+        if (_pathFinder == null) 
+        {
+            Debug.LogWarning("No Gameobject with name TileMap with a PathFiner component");
+            Destroy(this);
+        }
+
 
         _path = _pathFinder.GetPath(transform, _target);
     }

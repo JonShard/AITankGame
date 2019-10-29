@@ -30,27 +30,41 @@ public class PathFinder : MonoBehaviour
         Tile current = startNode;
         closedList.Add(current);
 
-        while (openList.Count > 0) 
-        {
-            foreach (Tile t in current.neighbors)
-            {
+        int i = 0;
+        do {
+            if (current == endNode) // If destination on the left, stop searching,
+                break;
+
+            i++;
+            int addedNeigbors = 0;
+            foreach (Tile t in current.neighbors) {
+                if (closedList.Contains(t))
+                    continue;
                 t.h = Vector3.SqrMagnitude(t.transform.position - endNode.transform.position);
                 t.f = t.h + t.Weight;
                 openList.Add(t);
+                addedNeigbors++;
             }
 
             openList.Sort();
+            openList.Reverse();
+
+            Debug.Log("New iteration: " + i 
+                + " open: " + openList.Count 
+                + " closed: " + closedList.Count 
+                + " Added neigbors: " + addedNeigbors
+                + "Smallest f: " + openList[0].f);
 
             closedList.Add(current);
             current = openList[0];
             openList.RemoveAt(0);
 
-        }
-
+        } while (openList.Count > 0);
         List<Transform> path = new List<Transform>();
         foreach (Tile t in closedList)
             path.Add(t.transform);
 
+        Debug.Log("Done. Path length: " + path.Count);
         return path;
     }
 }

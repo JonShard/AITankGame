@@ -9,12 +9,17 @@ public class TileMapGenerator : MonoBehaviour
     [SerializeField]
     bool _drawNeighborRange = false;
     
-    public List<Tile> tiles;
+    [HideInInspector] public List<Tile> tiles;
+
+
+    private void Start() {
+        SetNeigbors();
+    }
 
     public Tile FindClosestTile(Transform point)
     {
         float shortestSquareDist = Mathf.Infinity;
-        Tile bestCandidate = new Tile();
+        Tile bestCandidate = null;
         if (tiles.Count == 0)
         {
             Debug.LogWarning("Tried to get closest tile to a point, but tiles is empty.");

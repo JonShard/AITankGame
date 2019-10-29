@@ -1,8 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tile : MonoBehaviour {
+public class Tile : MonoBehaviour, IComparable<Tile> {
 
     public enum TileType { Traversable, NonTraversable }
 
@@ -14,8 +15,8 @@ public class Tile : MonoBehaviour {
 
     [SerializeField] public TileType type;
     public List<Tile> neighbors;
-    [HideInInspector] public float f = 0;
-    [HideInInspector] public float h = 0;
+    public float f;
+    public float h;
 
     public static bool operator <(Tile a, Tile b)
         => (a.f < b.f);
@@ -40,6 +41,12 @@ public class Tile : MonoBehaviour {
         }
         Gizmos.color = Color.red;
         Gizmos.DrawSphere(transform.position + new Vector3(0, _gizmoHeight, 0), _gizmoSize);
+    }
+
+    public int CompareTo(Tile t) {
+        if (t.f > f) return 1;
+        if (t.f < f) return -1;
+        else return 0;
     }
 #endif
 }
