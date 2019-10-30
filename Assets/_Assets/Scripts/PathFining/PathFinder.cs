@@ -27,44 +27,58 @@ public class PathFinder : MonoBehaviour
     {
         List<Tile> openList = new List<Tile>();
         List<Tile> closedList = new List<Tile>();
-        Tile current = startNode;
-        closedList.Add(current);
+        Tile current = null;
+
+        _generator.ResetTiles();
+        startNode.g = 0;
+        openList.Add(startNode);
+        
 
         int i = 0;
-        do {
+        while (openList.Count > 0) 
+        {
+            openList.Sort();
+            current = openList[openList.Count-1];
+
             if (current == endNode) // If destination on the left, stop searching,
                 break;
 
-            i++;
+            openList.Remove(current);
+
             int addedNeigbors = 0;
             foreach (Tile t in current.neighbors) {
-                if (closedList.Contains(t))
-                    continue;
-                t.h = Vector3.SqrMagnitude(t.transform.position - endNode.transform.position);
-                t.f = t.h + t.Weight;
-                openList.Add(t);
-                addedNeigbors++;
-            }
 
-            openList.Sort();
-            openList.Reverse();
+                t.h = Vector3.Magnitude(t.transform.position - endNode.transform.position);
+
+                float tentativeG = current.g + Vector3.Magnitude(current.transform.position - t.transform.position);
+                if (tentativeG <= t.g) 
+                {
+                    closedList.Add(current);
+                    t.g = tentativeG;
+                    t.f = t.g + t.h;
+                    if (!openList.Contains(t)) 
+                    {
+                        openList.Add(t);
+                    }
+                }
+            }
 
             Debug.Log("New iteration: " + i 
                 + " open: " + openList.Count 
                 + " closed: " + closedList.Count 
                 + " Added neigbors: " + addedNeigbors
-                + "Smallest f: " + openList[0].f);
-
-            closedList.Add(current);
-            current = openList[0];
-            openList.RemoveAt(0);
-
-        } while (openList.Count > 0);
+                + "Smallest f:  " /*+ openList[0].f*/);
+            i++;
+        } 
         List<Transform> path = new List<Transform>();
         foreach (Tile t in closedList)
             path.Add(t.transform);
 
-        Debug.Log("Done. Path length: " + path.Count);
+        if (current == endNode) // If destination on the left, stop searching,
+            Debug.Log("Done. Path length: " + path.Count);
+        else
+            Debug.Log("Done. No path possible! Closest path length: " + path.Count);
+
         return path;
     }
 }

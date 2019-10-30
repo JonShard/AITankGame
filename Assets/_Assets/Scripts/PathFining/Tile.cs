@@ -17,19 +17,7 @@ public class Tile : MonoBehaviour, IComparable<Tile> {
     public List<Tile> neighbors;
     public float f;
     public float h;
-
-    public static bool operator <(Tile a, Tile b)
-        => (a.f < b.f);
-    public static bool operator >(Tile a, Tile b)
-        => (a.f > b.f);
-
-    /*
-    public List<KeyValuePair<float, Tile>> GetNeigbors() {
-        List<KeyValuePair<float, Tile>> list = new List<KeyValuePair<float, Tile>>();
-        for
-        return list;
-    }
-    */
+    public float g;
 
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected() {

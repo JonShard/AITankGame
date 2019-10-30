@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class TileMapGenerator : MonoBehaviour
 {
+    [SerializeField]
+    float TileGValue = 1;
     [SerializeField, Range(1.05f, 3)]
     float _neigborsTheshold = 1.5f;
     [SerializeField]
@@ -12,7 +14,7 @@ public class TileMapGenerator : MonoBehaviour
     [HideInInspector] public List<Tile> tiles;
 
 
-    private void Start() {
+    private void Awake() {
         SetNeigbors();
     }
 
@@ -41,9 +43,20 @@ public class TileMapGenerator : MonoBehaviour
     void ClearNeigbors() 
     {
         tiles = new List<Tile>(GetComponentsInChildren<Tile>());
+        ResetTiles();
 
         foreach (Tile t in tiles) {
             t.neighbors.Clear();
+        }
+    }
+
+    public void ResetTiles() 
+    {
+        foreach (Tile t in tiles) 
+        {
+            t.h = Mathf.Infinity;
+            t.f = Mathf.Infinity;
+            t.g = Mathf.Infinity;
         }
     }
 
