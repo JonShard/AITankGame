@@ -22,7 +22,7 @@ public class Tank : MonoBehaviour
     public int lives = 1;
     public bool alive = true;
     [Header("Other")]
-    public float turretEjectForce = 400;
+    public float turretEjectForce = 10;
 
     [HideInInspector] public float turning = 0;
     [HideInInspector] public float throttle = 0;
@@ -75,18 +75,29 @@ public class Tank : MonoBehaviour
 
         _gunCooldown = reloadTime;
 
-        int tankBodyLayer = 1 << 16;
-        int defaultLayer = 1;
+        int tankBodyLayer = 1 << 17;    // Add layer 17, TankHitbox to mask.
+        int defaultLayer = 1;           // Add default layer like walls to mask.
         int layerMask = tankBodyLayer & defaultLayer;
         layerMask = ~layerMask;
 
         RaycastHit hit;
         // Does the ray intersect any objects excluding the player layer
-        if (Physics.Raycast(barrelTip.position, barrelTip.TransformDirection(Vector3.forward), out hit, Mathf.Infinity, layerMask)) {
+        if (Physics.Raycast(barrelTip.position, barrelTip.TransformDirection(Vector3.forward), out hit, Mathf.Infinity, layerMask))
+        {
             Debug.DrawRay(barrelTip.position, barrelTip.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
-            Debug.Log("Did Hit");
+            Tank hitTank = hit.transform.GetComponent<Tank>();
+            if(hitTank) 
+            {
+                Debug.Log("Hit a tank.");
+                hitTank.RegisterHit();
+            }
+            else 
+            {
+                Debug.Log("Hit something.");
+            }
         }
-        else {
+        else 
+        {
             Debug.DrawRay(barrelTip.position, barrelTip.TransformDirection(Vector3.forward) * 1000, Color.white);
             Debug.Log("Did not Hit");
         }
