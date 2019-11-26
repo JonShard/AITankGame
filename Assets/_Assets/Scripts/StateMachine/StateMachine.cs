@@ -7,8 +7,8 @@ using System.Linq;
 public class StateMachine : MonoBehaviour
 {
     [Header("Stats")]
-    [SerializeField, Tooltip("How many tiles should the tank remember that it's been on, so it doesn't walk in very small circles.")]
-    int _recentListLength = 10;
+    [Tooltip("How many tiles should the tank remember that it's been on, so it doesn't walk in very small circles.")]
+    public int recentListLength = 10;
     [SerializeField]
     float _visualRange = 6;
     [SerializeField]
@@ -128,6 +128,12 @@ public class StateMachine : MonoBehaviour
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, _fireRange);
             Gizmos.DrawSphere(transform.position + Vector3.up * _raycastHeightOffset, 0.06f);
+            Gizmos.color = Color.blue;
+            float radius = 0.3f;
+            for (int i = 0; i < recentTiles.Count; i++)
+            {
+                Gizmos.DrawSphere(recentTiles[i].transform.position, radius - ((1 - ((float)i/recentTiles.Count)) * radius));
+            }
         }
     }
 #endif

@@ -13,7 +13,7 @@ public class TileMapGenerator : MonoBehaviour
     
     [HideInInspector] public List<Tile> tiles;
 
-
+    // Runs before Start().
     private void Awake() {
         SetNeigbors();
     }
