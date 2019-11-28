@@ -6,22 +6,35 @@ using System.Linq;
 public class RoamBehaviour : StateMachineBehaviour
 {
     StateMachine _stateMachine;
-    StateMachineControl _control;
+    Tank _tank;
     TileMapGenerator _generator;
+
+    //OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
+    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        if (!_tank)
+            _tank = animator.GetComponent<Tank>();
+        if (!_stateMachine)
+            _stateMachine = animator.GetComponent<StateMachine>();
+        if (!_generator)
+            _generator = FindObjectOfType<TileMapGenerator>();  // Finds first intance in scene.
+    }
 
     void MoveToNewRandomTile(Transform t)
     {
-        //if length bigger than recentLength
-        if (_stateMachine.recentTiles.Count >= _stateMachine.recentListLength)
+        // Remove the oldest tile in recent list as we're adding a new one.
+        if (_stateMachine.recentTiles.Count >= _stateMachine.recentListLength) 
             _stateMachine.recentTiles.RemoveAt(0);
-        List<Tile> neighbors = new List<Tile> (_generator.FindClosestTile(t).neighbors);
+
+        // Get a list of all neighbors, pick a random one we haven't been on.
+        List<Tile> neighbors = new List<Tile> (_generator.FindClosestTile(t).neighbors); 
         neighbors = neighbors.OrderBy(x => Random.value).ToList(); // Shuffle our neigbor list copy.
         List<Tile> options = new List<Tile>();
         foreach (Tile tile in neighbors)
         {
             if (!_stateMachine.recentTiles.Contains(tile))
             {
-                _control.goToList.Add(tile.transform);
+                _tank.waypointList.Add(tile.transform);
                 _stateMachine.recentTiles.Add(tile);
                 return;
             }
@@ -30,32 +43,22 @@ public class RoamBehaviour : StateMachineBehaviour
                 options.Add(tile);
             }
         }
+        // If we've gotten to this point, we are surrounded by tiles we've been on, pick the oldest one.
         foreach (Tile tile in _stateMachine.recentTiles)
         {
             if (options.Contains(tile))
             {
-                _control.goToList.Add(tile.transform);
+                _tank.waypointList.Add(tile.transform);
                 _stateMachine.recentTiles.Add(tile);
                 return;
             }
         }
     }
 
-    //OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
-    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
-        if (!_stateMachine)
-            _stateMachine = animator.GetComponent<StateMachine>();
-        if (!_control)
-            _control = animator.GetComponent<StateMachineControl>();
-        if (!_generator)
-            _generator = FindObjectOfType<TileMapGenerator>();  // Finds first intance in scene.
-    }
-
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (_control.goToList.Count == 0)
+        if (_tank.waypointList.Count == 0)
         {
             MoveToNewRandomTile(animator.transform);
         }

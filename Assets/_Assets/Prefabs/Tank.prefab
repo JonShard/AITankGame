@@ -5610,7 +5610,6 @@ GameObject:
   m_Component:
   - component: {fileID: 441672550847791990}
   - component: {fileID: 441672550847791991}
-  - component: {fileID: 1001227474}
   - component: {fileID: 1001227475}
   m_Layer: 0
   m_Name: Tank
@@ -5653,18 +5652,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 84
   m_CollisionDetection: 0
---- !u!114 &1001227474
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 441672550847791989}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f0d16bf87cbad34e88ef93b650a5906, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1001227475
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5677,6 +5664,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85616627adb59e346a222216a41e408e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _debug: 0
+  _drawGizmos: 0
+  movementScheme: 1
   acceleration: 12
   maxSpeed: 8
   turnAcceleration: 6
@@ -5688,9 +5678,11 @@ MonoBehaviour:
   bulletSpeed: 50
   reloadTime: 4
   _recoilForce: 30
+  turretEjectForce: 6
   lives: 3
   alive: 1
-  turretEjectForce: 6
+  aimAtTrasform: {fileID: 0}
+  waypointList: []
   turning: 0
   throttle: 0
   turretMove: 0
