@@ -32,6 +32,8 @@ public class StateMachine : MonoBehaviour
     List<float> _distances = new List<float>();
 
     Animator _animator;              // Makes decisions on what to do based on parameters we give it.
+
+
     
     // Start is called before the first frame update
     void Start()

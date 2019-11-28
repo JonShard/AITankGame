@@ -22,6 +22,10 @@ public class PathFinder : MonoBehaviour
         //path.Add(endEntity);
         return path;
     }
+    public void Kake()
+    {
+        Debug.Log("works");
+    }
 
     public List<Transform> GetPath(Tile startNode, Tile endNode) 
     {

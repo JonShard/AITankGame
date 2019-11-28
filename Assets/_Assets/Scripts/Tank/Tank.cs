@@ -64,6 +64,7 @@ public class Tank : MonoBehaviour
             Debug.LogWarning("No Gameobject with name TileMap with a PathFiner component");
             Destroy(this);
         }
+
     }
 
     private void MoveUsingList()
@@ -200,9 +201,9 @@ public class Tank : MonoBehaviour
         }
     }
 
-    public void UpdatePath()
+    public void FindPath(Transform t, Transform t2)
     {
-        Debug.Log("Works");
+        waypointList = _pathFinder.GetPath(t, t2);
     }
 
 #if UNITY_EDITOR
