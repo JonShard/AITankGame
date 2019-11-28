@@ -194,6 +194,7 @@ public class Tank : MonoBehaviour
         lives--;
         if (lives <= 0)
         {
+            alive = false;
             Destroy(_turretRigid.GetComponent<ConfigurableJoint>());
             _turretRigid.AddRelativeForce(new Vector3(0, 1, 0.2f) * turretEjectForce, ForceMode.Impulse);
             _turretRigid.AddRelativeTorque(Random.rotation.eulerAngles * turretEjectForce*20);
@@ -202,7 +203,7 @@ public class Tank : MonoBehaviour
 
     public void UpdatePath()
     {
-        Debug.Log("Works");
+        //Debug.Log("Works");
     }
 
 #if UNITY_EDITOR

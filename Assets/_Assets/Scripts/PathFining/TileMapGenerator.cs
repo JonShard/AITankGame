@@ -6,7 +6,7 @@ public class TileMapGenerator : MonoBehaviour
 {
     [SerializeField]
     float TileGValue = 1;
-    [SerializeField, Range(1.05f, 3)]
+    [SerializeField, Range(1.05f, 30)]
     float _neigborsTheshold = 1.5f;
     [SerializeField]
     bool _drawNeighborRange = false;
