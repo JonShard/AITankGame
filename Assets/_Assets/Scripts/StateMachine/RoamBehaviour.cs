@@ -9,7 +9,6 @@ public class RoamBehaviour : StateMachineBehaviour
     Tank _tank;
     TileMapGenerator _generator;
 
-    public bool chasing = false;
 
     //OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -60,7 +59,7 @@ public class RoamBehaviour : StateMachineBehaviour
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (_tank.waypointList.Count == 0 && !chasing)
+        if (_tank.waypointList.Count == 0)
         {
             MoveToNewRandomTile(animator.transform);
         }

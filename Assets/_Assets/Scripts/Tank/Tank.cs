@@ -203,8 +203,9 @@ public class Tank : MonoBehaviour
 
     public void FindPath(Transform t, Transform t2)
     {
-        waypointList = _pathFinder.GetPath(t, t2);
-    }
+         List<Transform> wayspsointList = new List<Transform>();
+        wayspsointList.AddRange(_pathFinder.GetPath(t, t2));
+}
 
 #if UNITY_EDITOR
     private void OnDrawGizmos()
