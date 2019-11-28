@@ -35,6 +35,9 @@ public class Tank : MonoBehaviour
     ParticleSystem fireEffect;
     float _gunCooldown = -1;
 
+    PathFinder _pathFinder;
+    public List<Transform> _path;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -43,6 +46,13 @@ public class Tank : MonoBehaviour
         turretRigid = transform.Find("Turret").GetComponent<Rigidbody>();
         barrelTip = turretRigid.transform.Find("BarrelTip");
         fireEffect = GetComponentInChildren<ParticleSystem>();
+
+        _pathFinder = GameObject.Find("TileMap").GetComponent<PathFinder>();
+        if (_pathFinder == null)
+        {
+            Debug.LogWarning("No Gameobject with name TileMap with a PathFiner component");
+            Destroy(this);
+        }
     }
 
     // Update is called once per frame
@@ -123,5 +133,10 @@ public class Tank : MonoBehaviour
             turretRigid.AddRelativeForce(new Vector3(0, 1, 0.2f) * turretEjectForce, ForceMode.Impulse);
             turretRigid.AddRelativeTorque(Random.rotation.eulerAngles * turretEjectForce*20);
         }
+    }
+
+    public void UpdatePath()
+    {
+        Debug.Log("Works");
     }
 }

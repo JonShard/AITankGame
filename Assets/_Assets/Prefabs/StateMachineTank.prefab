@@ -384,8 +384,8 @@ GameObject:
   - component: {fileID: 2947365621554740001}
   - component: {fileID: 2947365621554740000}
   - component: {fileID: 1771666176441561075}
-  - component: {fileID: 8975191322667713571}
   - component: {fileID: 5673979124812722624}
+  - component: {fileID: 4851618980569336107}
   m_Layer: 0
   m_Name: StateMachineTank
   m_TagString: Untagged
@@ -513,20 +513,6 @@ MonoBehaviour:
   _debug: 0
   aimAtTrasform: {fileID: 0}
   goToList: []
---- !u!136 &8975191322667713571
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2947365621554740028}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  m_Radius: 0.5
-  m_Height: 1
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.52, z: 0}
 --- !u!135 &5673979124812722624
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -540,6 +526,24 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.4
   m_Center: {x: 0, y: 0.42, z: 0}
+--- !u!114 &4851618980569336107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2947365621554740028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: deeb7a43dfbf49847b22301db002a376, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _stopFollowingAtDistance: 1
+  _fireRange: 3
+  _target: {fileID: 0}
+  _path: []
+  _raycastHeightOffset: 0.5
+  _drawGizmos: 0
 --- !u!1 &2947365621755747734
 GameObject:
   m_ObjectHideFlags: 0

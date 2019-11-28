@@ -4,11 +4,14 @@ using UnityEngine;
 
 public class FireBehaviour : StateMachineBehaviour
 {
+    
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
-    //override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    //{
-    //    
-    //}
+    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        
+
+       // _path = _pathFinder.GetPath(animator.transform, animator.gameObject.GetComponent<StateMachine>().target.transform);
+    }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     //override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -17,8 +20,10 @@ public class FireBehaviour : StateMachineBehaviour
     //}
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
-    //override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    //{
-    //    
-    //}
+    override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        //animator.gameObject.GetComponent<StateMachine>().lastKnowPos = animator.gameObject.GetComponent<StateMachine>().target.transform;
+        
+        //_path = _pathFinder.GetPath(animator.transform, animator.gameObject.GetComponent<StateMachine>().target.transform);
+    }
 }
