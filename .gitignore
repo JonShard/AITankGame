@@ -14,6 +14,9 @@
 /[Ll]ogs/
 /[Mm]emoryCaptures/
 
+# Ignore unity version to ditch the annoying warning at launch.
+ProjectSettings/ProjectVersion.txt
+
 # Never ignore Asset meta data
 !/[Aa]ssets/**/*.meta
 
