@@ -46,6 +46,9 @@ public class Tank : MonoBehaviour
     ParticleSystem _fireEffect;
     float _gunCooldown = -1;
 
+    PathFinder _pathFinder;
+    public List<Transform> _path;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -54,6 +57,13 @@ public class Tank : MonoBehaviour
         _turretRigid = transform.Find("Turret").GetComponent<Rigidbody>();
         _barrelTip = _turretRigid.transform.Find("BarrelTip");
         _fireEffect = GetComponentInChildren<ParticleSystem>();
+
+        _pathFinder = GameObject.Find("TileMap").GetComponent<PathFinder>();
+        if (_pathFinder == null)
+        {
+            Debug.LogWarning("No Gameobject with name TileMap with a PathFiner component");
+            Destroy(this);
+        }
     }
 
     private void MoveUsingList()
@@ -190,6 +200,10 @@ public class Tank : MonoBehaviour
         }
     }
 
+    public void UpdatePath()
+    {
+        Debug.Log("Works");
+    }
 
 #if UNITY_EDITOR
     private void OnDrawGizmos()

@@ -7,7 +7,6 @@ public class FireBehaviour : StateMachineBehaviour
     StateMachine _stateMachine;
     Tank _tank;
 
-
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
@@ -17,7 +16,6 @@ public class FireBehaviour : StateMachineBehaviour
             _tank = animator.GetComponent<Tank>();
 
         _tank.aimAtTrasform = _stateMachine.target.transform;
-
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -30,6 +28,5 @@ public class FireBehaviour : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         _tank.aimAtTrasform = null;
-
     }
 }

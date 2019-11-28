@@ -32,8 +32,7 @@ public class StateMachine : MonoBehaviour
     List<float> _distances = new List<float>();
 
     Animator _animator;              // Makes decisions on what to do based on parameters we give it.
-    //StateMachineControl control;    // Moves thew tank around.
-
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -42,7 +41,6 @@ public class StateMachine : MonoBehaviour
         enemies.Remove(GetComponent<Tank>());                   // Remove ourselves from enemy list.
 
         _animator = GetComponent<Animator>();
-        //control = GetComponent<StateMachineControl>();
     }
 
     // Retuns distance to t if tank has line of sight to t, -1 otherwise.
