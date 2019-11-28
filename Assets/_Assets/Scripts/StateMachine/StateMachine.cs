@@ -18,7 +18,7 @@ public class StateMachine : MonoBehaviour
     public List<Tile> recentTiles;
     public List<Tank> enemies;
     public Tank target;
-    public Transform lastKnowPos;
+    public Vector3 lastKnowPos;
 
     [Header("State Machine Parameters")]    // We feed these into the animator.
     public bool hasTarget = false;
@@ -28,10 +28,10 @@ public class StateMachine : MonoBehaviour
     [SerializeField, Range(0.2f, 2)] private float _raycastHeightOffset = 0.5f;
     [SerializeField] private bool _drawGizmos = false;
 
-    List<Tank> lineOfSight = new List<Tank>();
-    List<float> distances = new List<float>();
+    List<Tank> _lineOfSight = new List<Tank>();
+    List<float> _distances = new List<float>();
 
-    Animator animator;              // Makes decisions on what to do based on parameters we give it.
+    Animator _animator;              // Makes decisions on what to do based on parameters we give it.
     //StateMachineControl control;    // Moves thew tank around.
 
     // Start is called before the first frame update
@@ -41,7 +41,7 @@ public class StateMachine : MonoBehaviour
         enemies = new List<Tank>(FindObjectsOfType<Tank>());    // Find all tanks in scene.
         enemies.Remove(GetComponent<Tank>());                   // Remove ourselves from enemy list.
 
-        animator = GetComponent<Animator>();
+        _animator = GetComponent<Animator>();
         //control = GetComponent<StateMachineControl>();
     }
 
@@ -72,8 +72,8 @@ public class StateMachine : MonoBehaviour
         hasTarget = (target);   // True of target is not null.
 
         if (target && 
-            lineOfSight.Contains(target) &&
-            distances[lineOfSight.IndexOf(target)] < _fireRange)
+            _lineOfSight.Contains(target) &&
+            _distances[_lineOfSight.IndexOf(target)] < _fireRange)
         {
             canFire = true;
         }
@@ -83,16 +83,17 @@ public class StateMachine : MonoBehaviour
         }
 
         // Tell the animator what the state is so it can decide what to do next.
-        animator.SetBool("hasTarget", hasTarget);
-        animator.SetBool("canFire", canFire);
+        _animator.SetBool("hasTarget", hasTarget);
+        _animator.SetBool("canFire", canFire);
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
         // Update internal state vaiables, like who our target is and rather or not we can see it.
-        lineOfSight.Clear();
-        distances.Clear();
+        target = null;
+        _lineOfSight.Clear();
+        _distances.Clear();
         foreach (Tank t in enemies)
         {
             if (t.lives <= 0)      // If an enemy has died, we remove it and consider next tank.
@@ -103,16 +104,18 @@ public class StateMachine : MonoBehaviour
             float dist = RaycastTarget(t, _visualRange, Color.yellow);
             if (dist > 0) // Do we see the tank?
             {
-                lineOfSight.Add(t);
-                distances.Add(dist);
+                _lineOfSight.Add(t);
+                _distances.Add(dist);
             }
         }
-        if (distances.Count > 0)    // Update who our target is.
+        if (_distances.Count > 0)    // Update who our target is.
         {
-            int closestVisibleTank = distances.IndexOf(distances.Min());
-            target = lineOfSight[closestVisibleTank];
+            int closestVisibleTank = _distances.IndexOf(_distances.Min());
+            target = _lineOfSight[closestVisibleTank];
         }
-        
+        if (target)
+            lastKnowPos = target.transform.position;
+
         // Tell the state machine what's happening. 
         UpdateStateParameters();
     }
