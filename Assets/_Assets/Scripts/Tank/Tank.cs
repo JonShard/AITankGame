@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Rigidbody)), SelectionBase]
 public class Tank : MonoBehaviour
 {
     [Header("Stats")]
