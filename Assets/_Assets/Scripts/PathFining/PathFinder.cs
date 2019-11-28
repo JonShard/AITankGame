@@ -19,7 +19,7 @@ public class PathFinder : MonoBehaviour
         Tile startTile = _generator.FindClosestTile(startEntity);
         Tile endTile = _generator.FindClosestTile(endEntity);
         List <Transform> path = GetPath(startTile, endTile);
-        path.Add(endEntity);
+        //path.Add(endEntity);
         return path;
     }
 
@@ -53,6 +53,7 @@ public class PathFinder : MonoBehaviour
                 float tentativeG = current.g + Vector3.Magnitude(current.transform.position - t.transform.position);
                 if (tentativeG <= t.g) 
                 {
+                    t.par = current;
                     closedList.Add(current);
                     t.g = tentativeG;
                     t.f = t.g + t.h;
@@ -71,8 +72,17 @@ public class PathFinder : MonoBehaviour
             i++;
         } 
         List<Transform> path = new List<Transform>();
-        foreach (Tile t in closedList)
-            path.Add(t.transform);
+        //foreach (Tile t in closedList)
+        //   path.Add(t.transform);
+        bool children = true;
+        Tile tile1 = endNode;
+        while (children)
+        {
+            path.Add(tile1.transform);
+            tile1 = tile1.par;
+            if (!tile1) children = false;
+        }
+        path.Reverse();
 
         if (current == endNode) // If destination on the left, stop searching,
             Debug.Log("Done. Path length: " + path.Count);
