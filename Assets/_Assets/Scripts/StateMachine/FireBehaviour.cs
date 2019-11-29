@@ -14,13 +14,12 @@ public class FireBehaviour : StateMachineBehaviour
             _stateMachine = animator.GetComponent<StateMachine>();
         if (!_tank)
             _tank = animator.GetComponent<Tank>();
-
-        _tank.aimAtTrasform = _stateMachine.target.transform;
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        if (_stateMachine.target) _tank.aimAtTrasform = _stateMachine.target.transform;
         _tank.FireGun();
     }
 

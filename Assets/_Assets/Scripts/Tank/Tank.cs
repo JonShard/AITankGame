@@ -126,21 +126,24 @@ public class Tank : MonoBehaviour
         if (_gunCooldown > 0)
             _gunCooldown -= Time.deltaTime;
 
-        switch (movementScheme)
+        if (alive)
         {
-            case MovementScheme.WaypointList:
-                MoveUsingList();
-                break;
-            case MovementScheme.UserInput:
-                MoveUsingUserInput();
-                break;
-            case MovementScheme.ControlValues:
-                MoveUsingValues();
-                break;
-        }
+            switch (movementScheme)
+            {
+                case MovementScheme.WaypointList:
+                    MoveUsingList();
+                    break;
+                case MovementScheme.UserInput:
+                    MoveUsingUserInput();
+                    break;
+                case MovementScheme.ControlValues:
+                    MoveUsingValues();
+                    break;
+            }
+            _rigid.velocity = Vector3.ClampMagnitude(_rigid.velocity, maxSpeed);
+            _rigid.angularVelocity = Vector3.ClampMagnitude(_rigid.angularVelocity, turnMaxSpeed);
+        }   
 
-        _rigid.velocity = Vector3.ClampMagnitude(_rigid.velocity, maxSpeed);
-        _rigid.angularVelocity = Vector3.ClampMagnitude(_rigid.angularVelocity, turnMaxSpeed);
     }
 
     public void FireGun() 
