@@ -27,7 +27,7 @@ public class RoamBehaviour : StateMachineBehaviour
             _stateMachine.recentTiles.RemoveAt(0);
 
         // Get a list of all neighbors, pick a random one we haven't been on.
-        List<Tile> neighbors = new List<Tile> (_generator.FindClosestTile(t).neighbors); 
+        List<Tile> neighbors = new List<Tile> (_generator.FindClosestTile(t.position).neighbors); 
         neighbors = neighbors.OrderBy(x => Random.value).ToList(); // Shuffle our neigbor list copy.
         List<Tile> options = new List<Tile>();
         foreach (Tile tile in neighbors)
@@ -53,6 +53,7 @@ public class RoamBehaviour : StateMachineBehaviour
                 return;
             }
         }
+        //System.GC.Collect();
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

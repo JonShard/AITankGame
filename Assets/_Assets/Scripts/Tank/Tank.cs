@@ -70,7 +70,7 @@ public class Tank : MonoBehaviour
     {
         if (waypointList.Count > 0)
         {
-            if (Vector3.SqrMagnitude(waypointList[0].position - transform.position) < 0.05f)
+            if (Vector3.SqrMagnitude(waypointList[0].position - transform.position) < 0.1f)
             {
                 if (_debug) Debug.Log("AI: Reached a node " + waypointList[waypointList.Count - 1].name + ", moving to next.");
                 waypointList.RemoveAt(0);
@@ -199,11 +199,6 @@ public class Tank : MonoBehaviour
             _turretRigid.AddRelativeForce(new Vector3(0, 1, 0.2f) * turretEjectForce, ForceMode.Impulse);
             _turretRigid.AddRelativeTorque(Random.rotation.eulerAngles * turretEjectForce*20);
         }
-    }
-
-    public void UpdatePath()
-    {
-        //Debug.Log("Works");
     }
 
 #if UNITY_EDITOR

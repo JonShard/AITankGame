@@ -18,7 +18,7 @@ public class TileMapGenerator : MonoBehaviour
         SetNeigbors();
     }
 
-    public Tile FindClosestTile(Transform point)
+    public Tile FindClosestTile(Vector3 point)
     {
         float shortestSquareDist = Mathf.Infinity;
         Tile bestCandidate = null;
@@ -30,7 +30,7 @@ public class TileMapGenerator : MonoBehaviour
 
         foreach (Tile t in tiles)
         {
-            float dist = (t.transform.position - point.position).sqrMagnitude;
+            float dist = (t.transform.position - point).sqrMagnitude;
             if (dist < shortestSquareDist)
             {
                 shortestSquareDist = dist;
@@ -57,6 +57,7 @@ public class TileMapGenerator : MonoBehaviour
             t.h = Mathf.Infinity;
             t.f = Mathf.Infinity;
             t.g = Mathf.Infinity;
+            t.parent = null;
         }
     }
 

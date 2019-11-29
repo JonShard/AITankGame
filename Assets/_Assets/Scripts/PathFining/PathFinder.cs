@@ -6,7 +6,10 @@ using UnityEngine;
 [RequireComponent(typeof(TileMapGenerator))]
 public class PathFinder : MonoBehaviour
 {
-    TileMapGenerator _generator;
+    private TileMapGenerator _generator;
+    private List<Tile> _openList = new List<Tile>();
+    private List<Tile> _closedList = new List<Tile>();
+    private List<Transform> _path = new List<Transform>();
 
     private void Awake() 
     {
@@ -14,36 +17,39 @@ public class PathFinder : MonoBehaviour
     }
 
 
-    public List<Transform> GetPath(Transform startEntity, Transform endEntity)
+    public List<Transform> GetPath(Vector3 startPos, Vector3 endPos)
     { 
-        Tile startTile = _generator.FindClosestTile(startEntity);
-        Tile endTile = _generator.FindClosestTile(endEntity);
+        Tile startTile = _generator.FindClosestTile(startPos);
+        Tile endTile = _generator.FindClosestTile(endPos);
         List <Transform> path = GetPath(startTile, endTile);
         //path.Add(endEntity);
         return path;
     }
 
+
+
     public List<Transform> GetPath(Tile startNode, Tile endNode) 
     {
-        List<Tile> openList = new List<Tile>();
-        List<Tile> closedList = new List<Tile>();
         Tile current = null;
+        _openList.Clear();
+        _closedList.Clear();
+        _path.Clear();
 
         _generator.ResetTiles();
         startNode.g = 0;
-        openList.Add(startNode);
+        _openList.Add(startNode);
         
 
         int i = 0;
-        while (openList.Count > 0) 
+        while (_openList.Count > 0) 
         {
-            openList.Sort();
-            current = openList[openList.Count-1];
+            _openList.Sort();
+            current = _openList[_openList.Count-1];
 
             if (current == endNode) // If destination on the left, stop searching,
                 break;
 
-            openList.Remove(current);
+            _openList.Remove(current);
 
             int addedNeigbors = 0;
             foreach (Tile t in current.neighbors) {
@@ -53,42 +59,41 @@ public class PathFinder : MonoBehaviour
                 float tentativeG = current.g + Vector3.Magnitude(current.transform.position - t.transform.position);
                 if (tentativeG <= t.g) 
                 {
-                    t.par = current;
-                    closedList.Add(current);
+                    t.parent = current;
+                    _closedList.Add(current);
                     t.g = tentativeG;
                     t.f = t.g + t.h;
-                    if (!openList.Contains(t)) 
+                    if (!_openList.Contains(t)) 
                     {
-                        openList.Add(t);
+                        _openList.Add(t);
                     }
                 }
             }
 
             Debug.Log("New iteration: " + i 
-                + " open: " + openList.Count 
-                + " closed: " + closedList.Count 
+                + " open: " + _openList.Count 
+                + " closed: " + _closedList.Count 
                 + " Added neigbors: " + addedNeigbors
                 + "Smallest f:  " /*+ openList[0].f*/);
             i++;
-        } 
-        List<Transform> path = new List<Transform>();
+        }
         //foreach (Tile t in closedList)
         //   path.Add(t.transform);
         bool children = true;
         Tile tile1 = endNode;
         while (children)
         {
-            path.Add(tile1.transform);
-            tile1 = tile1.par;
+            _path.Add(tile1.transform);
+            tile1 = tile1.parent;
             if (!tile1) children = false;
         }
-        path.Reverse();
+        _path.Reverse();
 
         if (current == endNode) // If destination on the left, stop searching,
-            Debug.Log("Done. Path length: " + path.Count);
+            Debug.Log("Done. Path length: " + _path.Count);
         else
-            Debug.Log("Done. No path possible! Closest path length: " + path.Count);
+            Debug.Log("Done. No path possible! Closest path length: " + _path.Count);
 
-        return path;
+        return _path;
     }
 }

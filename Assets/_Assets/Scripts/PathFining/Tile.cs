@@ -18,7 +18,7 @@ public class Tile : MonoBehaviour, IComparable<Tile> {
     public float f;
     public float h;
     public float g;
-    public Tile par;
+    public Tile parent;
 
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected() {

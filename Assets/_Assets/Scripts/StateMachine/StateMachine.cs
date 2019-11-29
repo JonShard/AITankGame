@@ -67,7 +67,7 @@ public class StateMachine : MonoBehaviour
 
     void UpdateStateParameters()
     {
-        hasTarget = (target);   // True of target is not null.
+       // hasTarget;   // True of target is not null.
 
         if (target && 
             _lineOfSight.Contains(target) &&
@@ -112,7 +112,10 @@ public class StateMachine : MonoBehaviour
             target = _lineOfSight[closestVisibleTank];
         }
         if (target)
+        {
+            hasTarget = true;
             lastKnowPos = target.transform.position;
+        }
 
         // Tell the state machine what's happening. 
         UpdateStateParameters();
@@ -129,6 +132,8 @@ public class StateMachine : MonoBehaviour
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, _fireRange);
             Gizmos.DrawSphere(transform.position + Vector3.up * _raycastHeightOffset, 0.06f);
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawSphere(lastKnowPos, 0.3f);
             Gizmos.color = Color.blue;
             float radius = 0.3f;
             for (int i = 0; i < recentTiles.Count; i++)
