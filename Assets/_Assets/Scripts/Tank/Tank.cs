@@ -21,7 +21,7 @@ public class Tank : MonoBehaviour
     public float turnMaxSpeed = 1;
     [Range(0, 0.5f)]public float baseTurnPower = 0.04f;
     public float lookSpeed = 10;
-    public int maxLives = 1;
+    public int maxLives = 3;
     [Header("Gun")]
     public GameObject bulletPrefab;
     public float bulletSpeed = 50;
@@ -45,6 +45,10 @@ public class Tank : MonoBehaviour
     Transform _barrelTip;
     ParticleSystem _fireEffect;
     float _gunCooldown = -1;
+    float _healCooldown;
+    float healingTime = 10f;
+
+    public bool isLow = false;
 
     PathFinder _pathFinder;
     public List<Transform> _path;
@@ -57,6 +61,7 @@ public class Tank : MonoBehaviour
         _turretRigid = transform.Find("Turret").GetComponent<Rigidbody>();
         _barrelTip = _turretRigid.transform.Find("BarrelTip");
         _fireEffect = GetComponentInChildren<ParticleSystem>();
+        _healCooldown = healingTime;
 
         _pathFinder = GameObject.Find("TileMap").GetComponent<PathFinder>();
         if (_pathFinder == null)
@@ -123,8 +128,16 @@ public class Tank : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+     
+        isLow = (lives <= 1);
+
+        if (_healCooldown > 0)
+            _healCooldown -= Time.deltaTime;
+
         if (_gunCooldown > 0)
             _gunCooldown -= Time.deltaTime;
+
+        Heal();
 
         if (alive)
         {
@@ -144,6 +157,15 @@ public class Tank : MonoBehaviour
             _rigid.angularVelocity = Vector3.ClampMagnitude(_rigid.angularVelocity, turnMaxSpeed);
         }   
 
+    }
+
+    public void Heal()
+    {
+        if (_healCooldown > 0)
+            return;
+        _healCooldown = healingTime;
+        if(lives < maxLives)
+        lives++;
     }
 
     public void FireGun() 

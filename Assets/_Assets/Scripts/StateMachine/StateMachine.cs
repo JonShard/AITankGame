@@ -23,6 +23,7 @@ public class StateMachine : MonoBehaviour
     [Header("State Machine Parameters")]    // We feed these into the animator.
     public bool hasTarget = false;
     public bool canFire = false;
+    public bool isLow = false;
 
     [Header("Raycast")]
     [SerializeField, Range(0.2f, 2)] private float _raycastHeightOffset = 0.5f;
@@ -30,6 +31,8 @@ public class StateMachine : MonoBehaviour
 
     List<Tank> _lineOfSight = new List<Tank>();
     List<float> _distances = new List<float>();
+
+    public Vector3 spawnPos = new Vector3(0, 0, 0);
 
     Animator _animator;              // Makes decisions on what to do based on parameters we give it.
     
@@ -67,6 +70,17 @@ public class StateMachine : MonoBehaviour
 
     void UpdateStateParameters()
     {
+
+        isLow = GetComponent<Tank>().isLow;
+        _animator.SetBool("isLow", isLow);
+        
+        if(isLow)
+        {
+            _animator.SetBool("hasTarget", false);
+            _animator.SetBool("canFire", false);
+            return;
+        }
+
        // hasTarget;   // True of target is not null.
 
         if (target && 
@@ -88,6 +102,15 @@ public class StateMachine : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if(target)
+        {
+            // float x = 360f - Vector3.Angle(transform.position, target.transform.position);
+            //spawnPos = transform.position - (new Vector3(transform.forward.z*2, 0, transform.forward.x*2));
+            float spawnX = transform.position.x - target.transform.position.x;
+            float spawnZ = transform.position.z - target.transform.position.z;
+
+            spawnPos = transform.position + new Vector3(spawnX*10f, transform.position.y, spawnZ*10f);
+        }
         // Update internal state vaiables, like who our target is and rather or not we can see it.
         target = null;
         _lineOfSight.Clear();
@@ -127,6 +150,8 @@ public class StateMachine : MonoBehaviour
     {
         if (_drawGizmos)
         {
+            Gizmos.color = Color.black;
+            Gizmos.DrawSphere(spawnPos, 0.5f);
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireSphere(transform.position, _visualRange);
             Gizmos.color = Color.red;
