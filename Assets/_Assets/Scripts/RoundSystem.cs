@@ -5,10 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class RoundSystem : MonoBehaviour
 {
-    public List<string> names = new List<string>();
-    public List<int> scores;
-    public List<Tank> players;
+    [SerializeField] private float roundTime = 120;
+    [SerializeField] private List<int> scores;
+    [SerializeField] private List<Tank> players;
 
+    [SerializeField] private float timeLeft = 0; 
     // Start is called before the first frame update
     void Awake()
     {
@@ -22,7 +23,6 @@ public class RoundSystem : MonoBehaviour
         }
     }
 
-    // called first
     void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -34,12 +34,18 @@ public class RoundSystem : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         players = new List<Tank>(FindObjectsOfType<Tank>());
+        timeLeft = roundTime;
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        timeLeft -= Time.deltaTime;
+        if (timeLeft < 0)
+        {
+            Debug.Log("It's a draw, everybody looses!");
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
 
         int playersAlive = 0;
         int winner = 0;
@@ -51,7 +57,7 @@ public class RoundSystem : MonoBehaviour
                 winner = players.IndexOf(t);
             }
         }
-        if (playersAlive == 1)
+        if (playersAlive <= 1)
         {
             Debug.Log("Winner! " + players[winner].name);
             scores[winner]++;
